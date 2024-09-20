@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="
+    default-src * data: blob: ws: wss: gap://ready file://*;
+    style-src * 'unsafe-inline'; 
+    script-src * 'unsafe-inline' 'unsafe-eval';
+    connect-src * ws: wss:;" />
+    <title>Memory recalling Experiment</title>
+
+    <link rel="stylesheet" href="/static/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="/static/style.css" type="text/css" />
+
+    <!-- update the version number as needed -->
+    <script src="/__/firebase/6.6.1/firebase-app.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script src="/__/firebase/6.6.1/firebase-auth.js"></script>
+    <script src="/__/firebase/6.6.1/firebase-database.js"></script>
+    <script src="/__/firebase/6.6.1/firebase-firestore.js"></script>
+    <script src="/__/firebase/6.6.1/firebase-messaging.js"></script>
+    <script src="/__/firebase/6.6.1/firebase-storage.js"></script>
+    <!-- initialize the SDK after all desired features are loaded -->
+    <script src="/__/firebase/init.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/9.4.4/math.min.js"></script>
+
+     <!-- Consent Page-->
+    <div id="container-consent">
+      <div id="consent">
+          <h1><b><u>Welcome</u></b></h1>
+          <h2>but we need your consent... </h2> 
+          <hr />
+          <div class="legal well">
+              <p> 
+              We would like to invite you the take part in the following study named "Memory Recall Experiment".
+              </p>
+              <p>
+                <br>This will take approximately 45-60 minutes, and you can earn up to $20 as a participation fee. <strong>The amount you receive will depend on your performance.</strong><br><br>
+                Please understand that we <em>reserve the right to not compensate entries</em> that fail to follow instructions.
+                <br>  
+              </p>
+              <div id="consentForm">
+                  <!-- **TODO** Replace the consent form with your own consent form -->
+                  <iframe frameborder="1" id="consentForm" src="https://docs.google.com/document/d/1mGaDVCSqrze2WYKNxCmf8wjhhwYjHTh9/preview"></iframe>
+              </div>
+              <button type="button" class="btn btn-default btn-sm" onClick="window.print();">
+              <span class="glyphicon glyphicon-print"></span> Print a copy of this
+              </button>
+          </div>
+          <hr />
+          <h4>If you agree and consent to these terms, please click "I Agree" to continue. Otherwise, please exit the page and return this HIT.</h4>
+          <br />
+          <center>
+              <button type="button" class="btn btn-danger btn-lg" onClick="return show('final-page', 'container-consent');">
+              <span class="glyphicon glyphicon-ban-circle"></span> I do <u><b>NOT</b></u> consent to these terms.
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions1', 'container-consent');">
+              <span class="glyphicon glyphicon-ok"></span> I Agree 
+              </button>
+          </center>
+      </div>
+    </div>
+     
+    <!-- Instruction-->
+    <div id="container-instructions1" style="display:none; padding: 50px">
+        <h1>Welcome to the Memory Recall Experiment!</h1>
+        <hr>
+      <div class="instructions well">
+            <p> 
+                If you are not using Google Chrome, please reopen the link in Chrome.
+            </p>
+            <p>
+                <br>Your voice will be recorded in this task. When prompted, please give the browser permission to record. 
+                Please ensure you are in a quiet environment and speak clearly. 
+            </p>
+            <p>
+                <br>Click "Next" to see the instructions in the next page.
+            </p>
+        </div>
+        <hr>
+        <center>
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-consent', 'container-instructions1');">
+              <span class="glyphicon glyphicon-arrow-left"></span> Back 
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions2', 'container-instructions1');">
+              <span class="glyphicon glyphicon-arrow-right"></span> Next
+              </button>
+          </center>
+      </div>
+
+      <div id="container-instructions2" style="display:none; padding: 50px">
+        <h1>The Overall Goal</h1>
+        <hr>
+      <div class="instructions well">
+            <p>
+                In this study, we will test your ability to recall words based on different prompts. 
+            </p>
+            <p>
+                <br>On each trial, you will see a word or phrase prompt indicating a category. 
+            </p>
+            <p>
+                <br>As soon as you see the prompt, you should start naming words that belong to the category. 
+            </p>
+
+            <p>
+                <br> You will have the flexibility to decide how long you want to spend on each category.  
+                You will press “<span style="color: red;">ENTER</span>” whenever you want to change categories.  
+                After a delay, the new category label will appear and, as before, your task is to recall words related to that category.   
+            </p>
+
+        </div>
+        <hr>
+        <center>
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions1', 'container-instructions2');">
+              <span class="glyphicon glyphicon-arrow-left"></span> Back 
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions3', 'container-instructions2');">
+              <span class="glyphicon glyphicon-arrow-right"></span> Next
+              </button>
+          </center>
+      </div>
+    
+
+        <div id="container-instructions3" style="display:none; padding: 50px">
+            <h1>Scoring</h1>
+            <hr>
+        <div class="instructions well">            
+            <p>
+                You will earn a point for each unique item you recall for each category; repetitions will not be counted. Your score will be displayed in real-time on the screen.
+            </p>
+            <p>
+                <br>If you think you would do better with a new category, you should change categories.
+                 However, each time you change categories, you will have to wait before the new category label appears. 
+                 As such, there is a time penalty whenever you switch to a new category. 
+            </p>
+            <p>
+                <br>The entire task will take a total of <strong>45 minutes</strong>. 
+            </p>
+            
+            <p>
+                <br><strong>Your goal is to name as many words as possible within the 45-minute time frame. The more words you name during these 45 minutes, the more money you will earn.</strong>
+            </p>
+        </div>
+        <hr>
+        <center>
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions2', 'container-instructions3');">
+              <span class="glyphicon glyphicon-arrow-left"></span> Back 
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions3_2', 'container-instructions3');">
+              <span class="glyphicon glyphicon-arrow-right"></span> Next
+              </button>
+          </center>
+
+      </div>
+      <div id="container-instructions3_2" style="display:none; padding: 50px">
+        <h1>Example Screenshot of the Recall Experiment</h1>
+        <hr>
+    <div class="instructions well">    
+        <p>
+            Below is a screenshot from the experiment. This example is provided to help you understand how the experiment works.
+        </p>
+
+        <p>
+            <br>1. The <strong>category</strong> and your <strong>score</strong> for that category will appear in the center.
+        </p>
+
+        <p>
+            <br>2. Your <strong>total score</strong> and <strong>the remaining time</strong> will be shown in the top right corner.
+        </p>
+
+        <p>
+            <br>3. A prompt at the bottom will instruct you to press the <strong>“Enter”</strong> key when you are ready to move to the next category.
+        </p>
+        <br>
+        <div>
+            <center>
+                <img src="images/point.png" alt="Instruction Image" style="width:60%">
+            </center>
+        </div>
+    </div>
+    <hr>
+    <center>
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions3', 'container-instructions3_2');">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back 
+          </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions4', 'container-instructions3_2');">
+          <span class="glyphicon glyphicon-arrow-right"></span> Next
+          </button>
+      </center>
+    </div>
+
+
+    <div id="container-instructions4" style="display:none; padding: 50px">
+        <h1>Earnings Summary</h1>
+        <hr>
+    <div class="instructions well">     
+        <p>
+            Remember, your participation fee will be based on the total number of unique words you recall.
+        <p>
+        <p>
+            <br>When you choose to move on to a new category, you will see an update showing your total earnings.
+        </p>
+        <br>
+            Below is an example screenshot of the earnings summary screen.
+        </p>
+        <br>
+        <div>
+            <center>
+                <img src="images/money.png" alt="Instruction Image" style="width:60%">
+            </center>
+        </div>
+    </div>
+    <hr>
+    <center>
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions3_2', 'container-instructions4');">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back 
+          </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions5', 'container-instructions4');">
+          <span class="glyphicon glyphicon-arrow-right"></span> Next
+          </button>
+      </center>
+  </div>
+
+      <div id="container-instructions5" style="display:none; padding: 50px">
+        <h1>The Time Delay</h1>
+        <hr>
+        <div class="instructions well">      
+            <p>
+                During the delay between categories, you will NOT be able to add to your score by recalling words.
+            </p>
+            <p>
+                <br>The screenshot below shows what the screen will look like during the delay.
+            </p>
+            <br>
+            <div>
+                <center>
+                    <img src="images/time1.png" alt="Instruction Image" style="width:60%">
+                </center>
+            </div>
+            <br>
+            <p>
+                You will have to maintain focus on the task during the delay. 
+                A cross will be shown on the center of the screen.
+                 During some delays, the cross will change into another shape for a brief duration.
+                  This shape will be either a "circle", "triangle", or "square".
+            </p>
+            <br>
+            <p>
+                Pay close attention to the change in shape because, after it disappears, you may be asked what shape you just saw. <strong>When prompted, please say your answer out loud to the experimenter.</strong>
+            </p>
+            <br>
+            <p>
+                If you answer correctly, you will see the message "correct" and no points will be lost.  
+            </p>
+            <br>
+            <p>
+                However, if you answer incorrectly, you will see the message “wrong” and LOSE points. The number of points lost will be shown next to the score and you will see a decrease in your total score. 
+            </p>
+            <br>
+            <p>
+                Please refrain from using your phone, engaging in other activities, or speaking with the experimenter during the delay. By staying focused, you will not lose any points.
+            </p>
+            <br>
+            <p>
+                Once the delay has passed, a new category will appear, and you will resume recalling words.
+            </p>
+            <p>
+        </div>
+        <hr>
+    <center>
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions4', 'container-instructions5');">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back 
+          </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions5_1', 'container-instructions5');">
+          <span class="glyphicon glyphicon-arrow-right"></span> Next
+          </button>
+      </center>
+  </div>
+
+  <div id="container-instructions5_1" style="display:none; padding: 50px">
+    <h1>Example of Shape Change during the Time Delay</h1>
+    <hr>
+    <div class="instructions well">
+        <p>
+            Below are two screenshots, one showing the change in shape and the other the prompt to indicate the shape change.
+        </p>
+        <br>
+        <p>
+            <strong>This check is to ensure that you stay focused during the time delay so the shape change will only happen on some trials at a random time during the time delay.</strong>
+        </p>
+        <br>
+        <div>
+            <center>
+                <img src="images/time2.png" alt="Instruction Image" style="width:60%">
+            </center>
+        </div>
+        <br>
+        <div>
+            <center>
+                <img src="images/time3.png" alt="Instruction Image" style="width:60%">
+            </center>
+        </div>
+        <br>
+
+        
+    </div>
+    <hr>
+    <center>
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions5', 'container-instructions5_1');">
+          <span class="glyphicon glyphicon-arrow-left"></span> Back 
+          </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions6', 'container-instructions5_1');">
+          <span class="glyphicon glyphicon-arrow-right"></span> Next
+          </button>
+      </center>
+  </div>
+
+  <div id="container-instructions6" style="display:none; padding: 50px">
+    <h1>Words examples</h1>
+    <hr>
+<div class="instructions well">        
+    <p>
+        As an example of the category prompt, you might see the word “TREES”.  In response, you could say “Oak”, “Pine”, “Willow”, “Cedar” and so on.
+    </p>
+
+    <p>
+        <br>You will get a point for repeating the same word between categories (if it fits with each category) but you will not get a point for repeating a word within a category.
+    </p>
+
+    <br>
+    <p>
+        For example, you might have said “Apple” in response to the category “TREES” and then say that word again in response to the category “TYPES OF PIE”.
+    </p>
+
+</div>
+<hr>
+<center>
+      <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions5_1', 'container-instructions6');">
+      <span class="glyphicon glyphicon-arrow-left"></span> Back 
+      </button>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <button type="button" class="btn btn-primary btn-lg" onClick="return show('attention-check', 'container-instructions6');">
+      <span class="glyphicon glyphicon-arrow-right"></span> Next
+      </button>
+  </center>
+</div>
+
+<div id="attention-check" style="display:none; padding: 50px">
+    <h1>Attentional Check</h1>
+    <hr>
+
+        <form id='attentional'>
+            <div class="row question">
+
+        <p>
+            Before you begin the experiment, we need to ensure you understand its purpose. If you answer the following questions incorrectly, you will not be able to proceed to the next steps.
+        </p>
+        <br>
+        <div class="questions" id="goal">
+            What is the overall goal of the experiment? 
+            <br>
+            <select id="goal" name="goal">
+             <option value=""></option>
+             <option value="score">Recall as many words as possible in each category</option>
+             <option value="total">Maximize your total score and earn the highest possible rewards</option>
+             <option value="improve">Improve your memory performance over time</option>
+         </select>
+         </div>
+
+         <br>
+
+         <div class="questions" id="shape">
+             How often will the shape appear during the time delay? 
+             <br>
+             <select id="shape" name="shape">
+              <option value=""></option>
+              <option value="each">The shape will appear during each time delay</option>
+              <option value="some">The shape will appear during some of the time delays</option>
+              <option value="improve">The shape only appears when a certain condition is met</option>
+              <option value="random">The shape appears randomly during the experiment</option>
+            </select>
+          </div>
+
+        </div>
+    </form>
+
+    <hr>
+        <center>
+              <button type="button" class="btn btn-primary btn-lg" onClick="return show('container-instructions6', 'attention-check');">
+              <span class="glyphicon glyphicon-arrow-left"></span> Back 
+              </button>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <button type="button" class="btn btn-primary btn-lg" onClick="checkattention();">
+              <span class="glyphicon glyphicon-arrow-right"></span> Next
+              </button>
+          </center>
+        </div>
+    
+    <!-- Initial Form for basic information 
+    **TODO** Update questions accordingly to what kinds of information you require-->
+    <div id="container-info" style="display:none">
+      <!-- CHANGE INDEX.JS CHECKINFO() IF MODIFIED -->
+      <h1>Basic Information</h1>
+      <hr>
+
+      <form id='infoform'>
+          <div class="row question">
+
+              <div class="questions" id="email">
+                  Prolific WorkerID: 
+                  <input id="email-input" type="text" name="email" value="">
+              </div>
+            
+              <div class="questions" id="age">
+                  Age: 
+                  <input id="age" type="text" name="age" value="">
+              </div>
+
+              <div class="questions" id="sex">
+                  Gender: 
+                  <select id="gender" name="gender">
+                      <option value=""></option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="other">Genderqueer/Non-Binary</option>
+                  </select>
+              </div>
+
+              <div class="questions" id="handedness">
+                    Right or left handed: 
+                <select id="hand" name="hand">
+                    <option value=""></option>
+                    <option value="righth">Right</option>
+                    <option value="lefth">Left</option>
+                    <option value="bothh">Ambidextrous</option>
+                </select>
+              </div>
+
+            <div class="questions" id="returner">
+                Have you done our experiments before? 
+                <select id="repeat" name="repeater">
+                    <option value=""></option>
+                    <option value="yes">Yes</option>
+                    <option value="no">No</option>
+                    <option value="idk">I don't remember</option>
+                </select>
+            </div>
+            <hr>
+
+            <p>
+                The following information is requested by the National Institute of Health. You are not <em>required</em>, but are encouraged to complete these.
+            </p>
+            
+            <div class="questions" id="ethnicity">
+                Ethnic Origin:  
+                <select id="ethnic" name="ethnic">
+                    <option value="">
+                    <option value="hispanic">Hispanic or Latino</option>
+                    <option value="non-hispanic">Not Hispanic or Latino</option>
+                </select>
+            </div>
+
+            <div class="questions" id="racial origin">
+                Racial Origin:  
+                <select id="race" name="race">
+                    <option value="">
+                    <option value="indian/native">American Indian or Alaskan Native</option>
+                    <option value="asian">Asian</option>
+                    <option value="african-american">Black or African American</option>
+                    <option value="pacific-islander">Native Hawaiian or Other Pacific Islander</option>
+                    <option value="white">White or Caucasian</option>
+                    <option value="multiple">More than one race</option>
+                    <option value="unkown">Unknown</option>
+                </select>
+            </div>
+
+          </div>
+        </form>
+        <hr>
+        <center>
+            <button type="button" id="back" value="back" class="btn btn-primary btn-lg previous" onClick="show('container-instructions6', 'container-info');">
+            <span class="glyphicon glyphicon-arrow-left"></span> Back 
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <button type="button" id="begin" value="next" class="btn btn-primary btn-lg continue" onClick="checkInfo();">
+                Begin Experiment <span class="glyphicon glyphicon-arrow-right"></span>
+            </button>
+        </center>
+    </div>
+
+    <!-- Game page -->
+    <div id="container-exp" style="display:none">
+    </div>
+
+    <!-- Thank you page 
+        **TODO** Update the completion code if necessary-->
+    <div id="container-not-an-ad" style="display:none">
+            <div class="media-left pull-left" href="#">
+                    <!-- REPLACE THE LOGO HERE WITH YOUR  UNIVERSITY, LAB, or COMPANY -->
+                    <img id="adlogo" src="images/university.png" alt="Lab Logo" />
+        </div>
+        <div class="media-body">
+            <h1>Thanks for your participation!</h1>
+            <hr />
+
+            <h2>Now just one more question and you're done!</h2>
+            
+            <form id="feedbackForm">
+                <div class="question" id="feedback">
+                    Are you a native English speaker?
+                    <input id="feedback" type="text" name="feedback" value="">
+                </div>
+            </form>
+            <center>
+                <!-- <h1><b><em>Please enter fullscreen mode before you begin.</em></b></h1> //only for safari
+                <hr> -->
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button type="button" id="end" value="final" onClick="saveFeedback();">
+                    Submit 
+                </button>
+            </center>
+            <h2>If you do not receive compensation in 5 business days please email ivrylab@gmail.com.</h2>
+            <h2>Your completion code is: "BB922D14".</h2>
+            <h2>You have a wonderful life now.</h2>
+        </div>
+    </div>
+
+    <!-- Ended early page -->
+    <div id="container-failed" style="display:none">
+        <div class="media-left pull-left" href="#">
+                <!-- **TODO** REPLACE THE LOGO HERE WITH YOUR  UNIVERSITY, LAB, or COMPANY -->
+                <img id="adlogo" src="images/university.png" alt="Lab Logo" />
+        </div>
+        <div class="media-body">
+                    <h1>Oh no!</h1>
+                    <hr />
+                    <p>If you are seeing this page it means you did not pass an attention or understanding task.</p>
+                    <p>This task requires your full attention, thus we kindly ask you to exit and return this HIT.</p>
+                    <p>We're sorry for this inconvenience.</p>
+                    <!--
+                    <h2>You have a wonderful life now.</h2>
+                    -->
+        </div>
+    </div>
+
+    <!-- Final Page -->
+    <div id="final-page" style="display:none">
+        <div class="media-left pull-left" href="#">
+                <!-- **TODO** REPLACE THE LOGO HERE WITH YOUR  UNIVERSITY, LAB, or COMPANY -->
+                <img id="adlogo" src="images/university.png" alt="Lab Logo" />
+        </div>
+        <div class="media-body">
+            <button onclick="show('container-not-an-ad', 'container-exp')">Switch Pages</button>
+            <h1>Your responses has been saved, thank you!</h1>
+            <hr />
+        </div>
+    </div>
+   </main>
+  </body>
+
+  <script src="static/lib/jquery-min.js"></script>
+  <script src="static/lib/bootstrap.min.js"></script>
+  <script src="static/lib/d3.v3.min.js"></script>
+  <script src="static/lib/underscore-min.js"></script>
+  <script src="static/lib/backbone-min.js"></script>
+  <!--<script src="https://unpkg.com/compromise"></script> -->
+<script src="index 4 3.js"></script>

@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "default": "memory-recall-5223c",
+    "foraging": "memory-recall-5223c"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
