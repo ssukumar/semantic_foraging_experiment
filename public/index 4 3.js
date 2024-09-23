@@ -1053,13 +1053,13 @@ function startRecording() {
 
     navigator.mediaDevices.getUserMedia({ audio: true })
         .then(stream => {
-            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
             audioChunks = []; // Reset the audio chunks
             mediaRecorder.ondataavailable = event => {
                 audioChunks.push(event.data);
             };
             mediaRecorder.onstop = () => {
-                let audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                let audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                 uploadAudio(audioBlob);  // Upload the recorded audio
                 console.log('Recording stopped');
             };
@@ -1068,6 +1068,7 @@ function startRecording() {
 
             // Initialize speech recognition
             recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'en-US';
             recognition.interimResults = false; // Only final results
             recognition.continuous = true;
 
@@ -1144,7 +1145,7 @@ function saveCSV() {
 // Function to upload audio (as in your existing code)
 function uploadAudio(audioBlob) {
     const storageRef = firebase.storage().ref();
-    const fileName = `${subject.id}-${categoryname}-${Date.now()}.wav`;
+    const fileName = `${subject.id}-${categoryname}-${Date.now()}.webm`;
     const audioRef = storageRef.child(`audio-recordings/${subject.id}/${fileName}`);
 
     const uploadTask = audioRef.put(audioBlob);
