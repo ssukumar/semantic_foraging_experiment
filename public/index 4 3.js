@@ -221,6 +221,13 @@ var num_trials;
 var counter = 0;
 var fixation_cross;
 
+var startdate;
+var laststartdate;
+var switchdate;
+var scoredate;
+var transdate;
+var nowdate;
+
 var category;
 var categories = [];
 var categoryname;
@@ -245,7 +252,7 @@ var shaperesult;
 var shapepart;
 var Fail = true;
 var continueFail = false;
-var minus = 1;
+var minus = 10;
 
 var phase = 44; // 44 + 1
 var question_time = 7; // 7
@@ -658,9 +665,18 @@ function startTrial() {
 }
 
 function startCategory() {
-    date = new Date();
-    startdate = Date.now();
-    startTime = (parseInt(date.getMonth()) + 1).toString() + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+    nowdate = new Date();
+
+    if (trial === 1) {
+        startdate = Date.now();
+        startTime = 0;
+    }
+    else {
+        startTime = nowdate - startdate;
+    }
+
+    console.log('start time: ' + startTime);
+    
     subjTrials.startTime = startTime;
 
     // Random assign the categories' name
@@ -711,9 +727,11 @@ function handleKeyPress(event) {
     if (event.key === 'Enter') {
         if (gamephase === 2) {
             // get the switch time
-            date = new Date();
-            switchTime = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+            switchdate = new Date();
+            switchTime = switchdate - startdate;
             subjTrials.switchTime = switchTime;
+
+            console.log('switch time: ' + switchTime);
 
             if (!isInDelay) {
                 stopRecording();
@@ -754,9 +772,11 @@ function handleKeyPress(event) {
     if (event.key === '1' && !isInDelay) {
         score++;
         if (gamephase === 2) {
-            date = new Date();
-            scoreTime = date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + "." + date.getMilliseconds();
+            scoredate = new Date();
+            scoreTime = scoredate - startdate;
             subjTrials.scoreTime.push(scoreTime);
+
+            console.log('score time: ' + scoreTime);
 
             totalscore++;
             money = totalscore * 0.05;
@@ -766,9 +786,6 @@ function handleKeyPress(event) {
                 money = 0;
             }
 
-            if (money > 20) {
-                money = 20;
-            }
         }
     }
 
@@ -993,10 +1010,6 @@ function attentionResponse() {
                 money = 0;
             }
 
-            if (money > 20) {
-                money = 20;
-            }
-
             subjTrials.minusscore = minus;
 
             svgContainer.select("#total2").text('Total Score: ' + totalscore);
@@ -1007,11 +1020,11 @@ function attentionResponse() {
                 .text('- ' + minus)
                 .attr("display", "block");
                 
-            minus = minus + 2;
+            minus = minus + 20;
         }
 
         else {
-            minus = 1;
+            minus = 10;
             subjTrials.minusscore = minus;
 
             totalscore = totalscore - minus;
@@ -1020,10 +1033,6 @@ function attentionResponse() {
 
             if (money < 0) {
                 money = 0;
-            }
-
-            if (money > 20) {
-                money = 20;
             }
 
             continueFail = true;
@@ -1035,7 +1044,7 @@ function attentionResponse() {
                 .text('- ' + minus)
                 .attr("display", "block");
 
-            minus = minus + 2;
+            minus = minus + 20;
         }
     }
 
@@ -1076,8 +1085,8 @@ function startRecording() {
                 let transcript = event.results[event.resultIndex][0].transcript.trim();
                 // let combinedPhrases = processTranscript(transcript); // Process with compromise
                 let words = transcript.split(' '); // Split the transcript into individual words
-                let date = new Date();
-                let time = `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}.${date.getMilliseconds()}`;
+                let transdate = new Date();
+                let time = transdate - startdate;
 
                 // Append each word with the time to CSV content
                 words.forEach(word => {
