@@ -761,6 +761,23 @@ function handleKeyPress(event) {
             // End the timer if time is up
             if (timeleft <= 0) {
                 stopRecording(); 
+
+                subjTrials.experimentID = experiment_ID;
+                subjTrials.id = subject.id.concat(trial.toString());
+                subjTrials.name = subject.id;
+                screen_height = window.screen.availHeight;
+                screen_width = window.screen.availWidth;
+            
+                subjTrials.score = score;
+                subjTrials.time = time;
+                subjTrials.trialNum = trial;
+                subjTrials.categoryname = categoryname;
+                subjTrials.totalscore = totalscore;
+                subject.currTrial = trial;
+
+                recordTrialSubj(trialcollection, subjTrials);
+                createSubject(subjectcollection, subject);
+
                 endGame();
                 return true; // Stop recording when time is up
             }
@@ -1292,10 +1309,18 @@ function endEarly() {
 function endGame() {
 
     closeFullScreen();
+
     $('html').css('cursor', 'auto');
     $('body').css('cursor', 'auto');
     $('body').css('background-color', 'white');
     $('html').css('background-color', 'white');
+
+    svgContainer.select("#money").attr("display", "block");
+
+    svgContainer.select("#delay").attr("display", "none");
+    svgContainer.select("#prepare").attr("display", "none");
+    svgContainer.select("#attention").attr("display", "none");
+    svgContainer.select("#fixation").attr("display", "none");
 
     d3.select('#category').attr('display', 'none');
     d3.select('#score').attr('display', 'none');
